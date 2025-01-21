@@ -3689,7 +3689,7 @@ requires-dist = [
     { name = "nomad-normalizer-plugin-system", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-atomistic", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-database", marker = "extra == 'plugins'", specifier = ">=1.0" },
-    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", specifier = ">=1.0" },
+    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", git = "https://github.com/exactlab/electronic-parsers.git?rev=develop" },
     { name = "nomad-parser-plugins-workflow", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-porous-materials", marker = "extra == 'plugins'", git = "https://github.com/FAIRmat-NFDI/nomad-porous-materials.git?rev=522f4a3208077f534f1c5e886527ee2104283d0b#522f4a3208077f534f1c5e886527ee2104283d0b" },
     { name = "nomad-schema-plugin-run", marker = "extra == 'plugins'", specifier = ">=1.0.1" },
@@ -3945,8 +3945,8 @@ wheels = [
 
 [[package]]
 name = "nomad-parser-plugins-electronic"
-version = "1.0.2"
-source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
+version = "1.0.3.dev15+g5df399b"
+source = { git = "https://github.com/exactlab/electronic-parsers.git?rev=develop#5df399b4bfe9205c708ab38aa272972d200dacaf" }
 dependencies = [
     { name = "h5py" },
     { name = "lxml" },
@@ -3957,10 +3957,6 @@ dependencies = [
     { name = "nomad-schema-plugin-simulation-workflow" },
     { name = "pydantic" },
     { name = "pyyaml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0b/1c/55517bb81b8d7250703903f372349d54d4c4d211a667b2342b297db832b8/nomad_parser_plugins_electronic-1.0.2.tar.gz", hash = "sha256:9317f608bda02878043fcf2246f2b29f89dc25774eba26684b8a46a5cc64f819", size = 82507358 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/7b/daf4e374a6ed5e1e3269b92fd276802760c99981dd87f7adce87d8cca597/nomad_parser_plugins_electronic-1.0.2-py3-none-any.whl", hash = "sha256:e48e8a5992b0913040a0825447869d25c218e97bde83648880bde71d01d40909", size = 1128012 },
 ]
 
 [[package]]
