@@ -3689,7 +3689,7 @@ requires-dist = [
     { name = "nomad-normalizer-plugin-system", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-atomistic", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-database", marker = "extra == 'plugins'", specifier = ">=1.0" },
-    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", specifier = ">=1.0" },
+    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", git = "https://github.com/exactlab/electronic-parsers.git?rev=develop" },
     { name = "nomad-parser-plugins-workflow", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-porous-materials", marker = "extra == 'plugins'", git = "https://github.com/FAIRmat-NFDI/nomad-porous-materials.git?rev=522f4a3208077f534f1c5e886527ee2104283d0b#522f4a3208077f534f1c5e886527ee2104283d0b" },
     { name = "nomad-schema-plugin-run", marker = "extra == 'plugins'", specifier = ">=1.0.1" },
@@ -3945,8 +3945,8 @@ wheels = [
 
 [[package]]
 name = "nomad-parser-plugins-electronic"
-version = "1.0"
-source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
+version = "1.0.3.dev12+g146b92b"
+source = { git = "https://github.com/exactlab/electronic-parsers.git?rev=develop#146b92ba8c1ed7a68a464641af30b9697212a70f" }
 dependencies = [
     { name = "h5py" },
     { name = "lxml" },
@@ -3957,10 +3957,6 @@ dependencies = [
     { name = "nomad-schema-plugin-simulation-workflow" },
     { name = "pydantic" },
     { name = "pyyaml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a2/11/36d2cd191ba05d54ee6ed1323c6f15fe950dba8b3f2cb8cbc343a9264409/nomad_parser_plugins_electronic-1.0.tar.gz", hash = "sha256:8273593e3b2da5d218c064f42fd1b3322c72888f00bdeb0ea4dd0d2539c469e8", size = 876415 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/6c/f52fa20394fe889c0245a3b9ecbf3e1e36bf0218985570df55ccb947b6b2/nomad_parser_plugins_electronic-1.0-py3-none-any.whl", hash = "sha256:cb5b9681cf821b665482309cfac45339ddf2230091bd379ac642f861713ca182", size = 958698 },
 ]
 
 [[package]]
