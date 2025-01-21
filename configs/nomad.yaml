@@ -31,3 +31,4 @@ elastic:
 plugins:
   exclude:
     - 'parsers/magres'
+    - 'parsers/quantumespresso'
