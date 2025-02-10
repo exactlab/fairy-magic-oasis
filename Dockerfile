@@ -119,32 +119,32 @@ EXPOSE 9000
 VOLUME /app/.volumes/fs
 
 
-FROM jupyter/datascience-notebook:lab-3.6.2 AS jupyter
+# FROM jupyter/datascience-notebook:lab-3.6.2 AS jupyter
 
-# Fix: https://github.com/hadolint/hadolint/wiki/DL4006
-# Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
+# # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
+# SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-USER root
+# USER root
 
-RUN apt-get update \
- && apt-get install --yes --quiet --no-install-recommends \
-       libmagic1 \
-       # clean cache and logs
-       && rm -rf /var/lib/apt/lists/* /var/log/* /var/tmp/* ~/.npm
+# RUN apt-get update \
+#  && apt-get install --yes --quiet --no-install-recommends \
+#        libmagic1 \
+#        # clean cache and logs
+#        && rm -rf /var/lib/apt/lists/* /var/log/* /var/tmp/* ~/.npm
 
-# Switch back to jovyan to avoid accidental container runs as root
-USER ${NB_UID}
-WORKDIR "${HOME}"
+# # Switch back to jovyan to avoid accidental container runs as root
+# USER ${NB_UID}
+# WORKDIR "${HOME}"
 
-COPY --from=ghcr.io/astral-sh/uv:0.4 /uv /bin/uv
+# COPY --from=ghcr.io/astral-sh/uv:0.4 /uv /bin/uv
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv export --extra plugins --extra jupyter | uv pip install -r /dev/stdin --system
+# RUN --mount=type=cache,target=/root/.cache/uv \
+#     --mount=type=bind,source=uv.lock,target=uv.lock \
+#     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+#     uv export --extra plugins --extra jupyter | uv pip install -r /dev/stdin --system
 
 
-# Get rid ot the following message when you open a terminal in jupyterlab:
-# groups: cannot find name for group ID 11320
-RUN touch ${HOME}/.hushlogin
+# # Get rid ot the following message when you open a terminal in jupyterlab:
+# # groups: cannot find name for group ID 11320
+# RUN touch ${HOME}/.hushlogin
