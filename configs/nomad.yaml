@@ -21,3 +21,6 @@ elastic:
   entries_index: nomad_oasis_entries_v1
   materials_index: nomad_oasis_materials_v1
 
+plugins:
+  entry_points:
+    exclude: ["electronicparsers:magres_parser_entry_point"]
