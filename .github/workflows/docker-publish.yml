@@ -26,6 +26,9 @@ env:
     atomisticparsers
     nomad_aitoolkit
     pynxtools_igor
+    electronicparsers
+    nomad_nmr_schema
+    nomad_parser_magres
 
 permissions:
   contents: write
@@ -107,7 +110,6 @@ jobs:
         env:
           PLUGIN_TESTS_CI_NODE_INDEX: ${{ matrix.group }}
         run: |
-          # replace the yaml list with a string, use a `,` to separate the plugins
           PLUGINS_STRING=$(echo "$PLUGIN_TESTS_PLUGINS_TO_SKIP" | tr '\n' ',' | sed 's/,$//')
           uv run \
             --extra plugins \
