@@ -25,8 +25,10 @@ In this README you will find instructions for:
 1. [Deploying the distribution](#deploying-the-distribution)
 2. [Adding a plugin](#adding-a-plugin)
 3. [Using the jupyter image](#the-jupyter-image)
-4. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
-5. [Solving common issues](#faqtrouble-shooting)
+4. [Automated unit and example upload tests in CI](#automated-unit-and-example-upload-tests-in-ci)
+5. [Setup regular package updates with Dependabot](#set-up-regular-package-updates-with-dependabot)
+6. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
+7. [Solving common issues](#faqtrouble-shooting)
 
 ## Deploying the distribution
 
@@ -68,29 +70,71 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
     docker compose pull
     ```
 
-5. And run it with docker compose in detached (--detach or -d) mode
+5. Configuring Secure HTTP and HTTPS Connections
+
+   By default `docker-compose.yaml` uses the HTTP protocol for communication. This works for testing, but before entering production you must secure your setup with HTTPS; otherwise, any communication with the server—including credentials and sensitive data—can be compromised.
+
+   HTTPS requires a TLS certificate, which must be renewed periodically. Depending on your setup, you have several options:
+
+   1. You already have a certificate.
+
+      In this case, you just need the certificate and key files.
+
+   2. Free certificate from Let's Encrypt
+
+      [Let's Encrypt](https://letsencrypt.org/) provides free TLS certificates for those with a domain name. Follow their tutorials for instructions on generating a certificate.
+
+   3. Self-signed certificate
+
+      For testing, you can create a [self-signed certificate](https://en.wikipedia.org/wiki/Self-signed_certificate). Note that self-signed certificates are not recommended for production since they are not trusted by browsers. You can generate one with:
+
+      ```sh
+      mkdir ssl
+      openssl req -x509 -nodes -days 365 \
+        -newkey rsa:2048 \
+        -keyout ./ssl/selfsigned.key \
+        -out ./ssl/selfsigned.crt \
+        -subj "/CN=localhost"
+      ```
+
+   To start using a TLS certificate, update the `proxy` configuration in `docker-compose.yml`:
+   ```diff
+   - # HTTP
+   - - ./configs/nginx_http.conf:/etc/nginx/conf.d/default.conf:ro
+
+   + # HTTPS
+   + - ./configs/nginx_https.conf:/etc/nginx/conf.d/default.conf:ro
+   + - ./ssl:/etc/nginx/ssl:ro  # Your certificate files
+   ```
+
+6. And run it with docker compose in detached (--detach or -d) mode
 
     ```sh
     docker compose up -d
     ```
 
-6. Optionally you can now test that NOMAD is running with
+7. (Optional) You can now test that NOMAD is running with
 
-    ```
+    ```sh
+    # HTTP
     curl localhost/nomad-oasis/alive
+
+    # HTTPS (--insecure flag is only needed for a self-signed certificate)
+    curl --insecure https://localhost/nomad-oasis/alive
     ```
 
 7. Finally, open [http://localhost/nomad-oasis](http://localhost/nomad-oasis) in your browser to start using your new NOMAD Oasis.
 
 #### Updating the image
-1. Whenever you update your image you need to shut down NOMAD using
+Any pushes to the main branch of this repository, such as when [adding a plugin](#adding-a-plugin), will trigger a pipeline that generates a new app and jupyter image.
+   
+1. To update your local image you need to shut down NOMAD using
 
     ```sh
     docker compose down
     ```
 
     and then repeat steps 4. and 5. above.
-   
 2. You can remove unused images to free up space by running
 
     ```sh
@@ -113,7 +157,7 @@ You can find more details on setting up and maintaining an Oasis in the NOMAD do
 ### For an existing Oasis
 
 If you already have an Oasis running you only need to change the image being pulled in
-your `docker-compose.yaml` with `ghcr.io/exactlab/fairy-magic-oasis:main` for the services
+your `docker-compose.yaml` with `ghcr.io/fairmat-nfdi/nomad-distro-template:main` for the services
 `worker`, `app`, `north`, and `logtransfer`.
 
 If you want to use the `nomad.yaml` from this repository you also need to comment out
@@ -194,12 +238,29 @@ jupyter = [
 ]
 ```
 
+## Automated Unit and Example Upload Tests in CI
+
+By default, all unit tests from every plugin are executed to ensure system stability and catch potential issues early. These tests validate core functionality and help maintain consistency across different plugins.
+
+In addition to unit tests, the pipeline also verifies that all example uploads can be processed correctly. This ensures that any generated entries do not contain error messages, providing confidence that data flows through the system as expected.
+
+For example upload tests, the CI uses the image built in the Build Image step. It then runs the Docker container and starts up the application to confirm that it functions correctly. This approach ensures that if the pipeline passes, the app is more likely to run smoothly in a Dockerized environment on a server, not just locally.
+
+If you need to disable tests for specific plugins, update the **PLUGIN_TESTS_PLUGINS_TO_SKIP** variable in [.github/workflows/docker-publish.yml](./.github/workflows/docker-publish.yml#L19) by adding the plugin names to the existing list.
+
+## Set Up Regular Package Updates with Dependabot
+
+Dependabot is already configured in the repository’s CI setup, but you need to enable it manually in the repository settings.
+
+To enable Dependabot, go to Settings > Code security and analysis in your GitHub repository. From there, turn on Dependabot alerts and version updates. Once enabled, Dependabot will automatically check for dependency updates and create pull requests when new versions are available.
+
+This automated process helps ensure that your dependencies stay up to date, improving security and reducing the risk of vulnerabilities.
 
 ## Updating the distribution from the template
 
 In order to update an existing distribution with any potential changes in the template you can add a new `git remote` for the template and merge with that one while allowing for unrelated histories:
 
-```
+```sh
 git remote add template https://github.com/FAIRmat-NFDI/nomad-distro-template
 git fetch template
 git merge template/main --allow-unrelated-histories
@@ -207,7 +268,7 @@ git merge template/main --allow-unrelated-histories
 
 Most likely this will result in some merge conflicts which will need to be resolved. At the very least the `Dockerfile` and GitHub workflows should be taken from "theirs":
 
-```
+```sh
 git checkout --theirs Dockerfile
 git checkout --theirs .github/workflows/docker-publish.yml
 ```
@@ -216,7 +277,7 @@ For detailed instructions on how to resolve the merge conflicts between differen
 
 Once the merge conflicts are resolved you should add the changes and commit them
 
-```
+```sh
 git add -A
 git commit -m "Updated to new distribution version"
 ```

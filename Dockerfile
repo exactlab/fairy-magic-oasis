@@ -5,6 +5,9 @@
 # https://docs.docker.com/engine/reference/builder/
 
 ARG PYTHON_VERSION=3.12
+ARG UV_VERSION=0.6
+
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv_image
 
 FROM python:${PYTHON_VERSION}-slim AS base
 
@@ -87,12 +90,14 @@ RUN adduser \
 
 
 # Install UV
-COPY --from=ghcr.io/astral-sh/uv:0.4 /uv /bin/uv
+COPY --from=uv_image /uv /bin/uv
+
+ARG SETUPTOOLS_SCM_PRETEND_VERSION_FOR_NOMAD_DISTRIBUTION='0.0'
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --extra plugins --frozen --no-install-project
+    uv sync --extra plugins --frozen
 
 
 COPY scripts ./scripts
@@ -117,34 +122,3 @@ EXPOSE 8000
 EXPOSE 9000
 
 VOLUME /app/.volumes/fs
-
-
-# FROM jupyter/datascience-notebook:lab-3.6.2 AS jupyter
-
-# # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
-# # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
-# SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-# USER root
-
-# RUN apt-get update \
-#  && apt-get install --yes --quiet --no-install-recommends \
-#        libmagic1 \
-#        # clean cache and logs
-#        && rm -rf /var/lib/apt/lists/* /var/log/* /var/tmp/* ~/.npm
-
-# # Switch back to jovyan to avoid accidental container runs as root
-# USER ${NB_UID}
-# WORKDIR "${HOME}"
-
-# COPY --from=ghcr.io/astral-sh/uv:0.4 /uv /bin/uv
-
-# RUN --mount=type=cache,target=/root/.cache/uv \
-#     --mount=type=bind,source=uv.lock,target=uv.lock \
-#     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-#     uv export --extra plugins --extra jupyter | uv pip install -r /dev/stdin --system
-
-
-# # Get rid ot the following message when you open a terminal in jupyterlab:
-# # groups: cannot find name for group ID 11320
-# RUN touch ${HOME}/.hushlogin
