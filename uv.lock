@@ -2814,6 +2814,7 @@ plugins = [
     { name = "nomad-normalizer-plugin-soap" },
     { name = "nomad-normalizer-plugin-spectra" },
     { name = "nomad-normalizer-plugin-system" },
+    { name = "nomad-parser-magres" },
     { name = "nomad-parser-plugins-atomistic" },
     { name = "nomad-parser-plugins-database" },
     { name = "nomad-parser-plugins-electronic" },
@@ -2839,6 +2840,7 @@ requires-dist = [
     { name = "nomad-normalizer-plugin-soap", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-normalizer-plugin-spectra", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-normalizer-plugin-system", marker = "extra == 'plugins'", specifier = ">=1.0" },
+    { name = "nomad-parser-magres", marker = "extra == 'plugins'", git = "https://github.com/nomad-coe/nomad-parser-magres.git?rev=develop" },
     { name = "nomad-parser-plugins-atomistic", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-database", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", git = "https://github.com/exactlab/electronic-parsers.git?rev=parser_qe_nmr" },
@@ -3075,6 +3077,17 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/62/da/3d4c335024877f9257243605c8dec088f0eaa56fbe1ad135ad3325298232/nomad_normalizer_plugin_system-1.0.3.tar.gz", hash = "sha256:b526e41dfbb0f5baf53e902b6392c9cbc0a12cd397e31355abac80c2b09e4d00", size = 19867380 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/57/2e/80b58c53ac04d58ae01cd185a7fdff9119718d4099664b8af6a5e486ba3c/nomad_normalizer_plugin_system-1.0.3-py3-none-any.whl", hash = "sha256:f8314a661630dd0c6ad79f08ff6dd02ca160a99f0eb496ba2f23bf047b81eca8", size = 12969 },
+]
+
+[[package]]
+name = "nomad-parser-magres"
+version = "0.1.dev89+g9d630fb"
+source = { git = "https://github.com/nomad-coe/nomad-parser-magres.git?rev=develop#9d630fb300fd57fb18c108014012b79a15466df1" }
+dependencies = [
+    { name = "nomad-lab" },
+    { name = "nomad-nmr-schema" },
+    { name = "nomad-schema-plugin-simulation-workflow" },
+    { name = "nomad-simulations" },
 ]
 
 [[package]]
