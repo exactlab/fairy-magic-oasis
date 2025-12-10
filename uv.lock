@@ -2372,7 +2372,6 @@ plugins = [
     { name = "nomad-normalizer-plugin-soap" },
     { name = "nomad-normalizer-plugin-spectra" },
     { name = "nomad-normalizer-plugin-system" },
-    { name = "nomad-parser-magres" },
     { name = "nomad-parser-plugins-atomistic" },
     { name = "nomad-parser-plugins-database" },
     { name = "nomad-parser-plugins-electronic" },
@@ -2398,10 +2397,9 @@ requires-dist = [
     { name = "nomad-normalizer-plugin-soap", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-normalizer-plugin-spectra", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-normalizer-plugin-system", marker = "extra == 'plugins'", specifier = ">=1.0" },
-    { name = "nomad-parser-magres", marker = "extra == 'plugins'", git = "https://github.com/nomad-coe/nomad-parser-magres.git?rev=develop" },
     { name = "nomad-parser-plugins-atomistic", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-database", marker = "extra == 'plugins'", specifier = ">=1.0" },
-    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", git = "https://github.com/exactlab/electronic-parsers.git?rev=epr-parser" },
+    { name = "nomad-parser-plugins-electronic", marker = "extra == 'plugins'", git = "https://github.com/exactlab/electronic-parsers.git?rev=parser_qe_nmr" },
     { name = "nomad-parser-plugins-workflow", marker = "extra == 'plugins'", specifier = ">=1.0" },
     { name = "nomad-porous-materials", marker = "extra == 'plugins'", git = "https://github.com/FAIRmat-NFDI/nomad-porous-materials.git?rev=522f4a3208077f534f1c5e886527ee2104283d0b" },
     { name = "nomad-schema-plugin-run", marker = "extra == 'plugins'", specifier = ">=1.0.1" },
@@ -2605,17 +2603,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nomad-parser-magres"
-version = "0.1.dev90+gcffc9b368"
-source = { git = "https://github.com/nomad-coe/nomad-parser-magres.git?rev=develop#cffc9b3681cb19add3e0cd9f699522267033f9a5" }
-dependencies = [
-    { name = "nomad-lab" },
-    { name = "nomad-nmr-schema" },
-    { name = "nomad-schema-plugin-simulation-workflow" },
-    { name = "nomad-simulations" },
-]
-
-[[package]]
 name = "nomad-parser-plugins-atomistic"
 version = "1.0.10"
 source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
@@ -2655,8 +2642,8 @@ wheels = [
 
 [[package]]
 name = "nomad-parser-plugins-electronic"
-version = "1.0.3.dev92+g40b392ad2"
-source = { git = "https://github.com/exactlab/electronic-parsers.git?rev=epr-parser#40b392ad2e0073caa03c9910c0dd7d844d08eda5" }
+version = "1.0.3.dev89+gca5c537d7"
+source = { git = "https://github.com/exactlab/electronic-parsers.git?rev=parser_qe_nmr#ca5c537d7494343ae9a1f0a25c5a9a5d36962a37" }
 dependencies = [
     { name = "h5py" },
     { name = "lxml" },

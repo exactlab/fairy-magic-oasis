@@ -28,7 +28,6 @@ env:
     pynxtools_igor
     electronicparsers
     nomad_nmr_schema
-    nomad_parser_magres
 
 permissions:
   contents: write
